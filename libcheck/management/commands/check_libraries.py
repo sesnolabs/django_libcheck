@@ -4,7 +4,7 @@ import warnings
 import requests
 from django.core.management.base import BaseCommand
 from django.conf import settings
-import libcheck_config as libcheck_config
+from libcheck import libcheck_config
 
 class CheckerCommand:
 
