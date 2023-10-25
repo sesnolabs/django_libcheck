@@ -41,7 +41,6 @@ LIBRARIES = [
     'django', 'os', 'sys',  # default Django libraries
     'setuptools', 'warnings', 'requests',  # libcheck required libraries
 ]
-
   ```
 and add the libraries that have to be checked in the `LIBRARIES`.
 Update the email `SAFETY_NOTICES_EMAIL` to be notified once a cybersecurity alert related to a library arise.
