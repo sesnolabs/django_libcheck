@@ -28,10 +28,10 @@ INSTALLED_APPS = [
     ...
 ]
   ```
-Add the end of the `settings.py` file, add the following:
+At the end of the `settings.py` file, add the following:
   ```
 TEST = False  # If True, a notification is sent to SAFETY_NOTICES_EMAIL even if no safety alert
-PIPFILE_FULL_PATH = '/pipfile/full/path'
+PIPFILE_FULL_PATH = '/full/path/Pipfile'  # Set PIPFILE_FULL_PATH = None if there is no Pipfile for the project
 SAFETY_NOTICES_EMAIL = 'your_email@domain.extension'
 API_KEY = 'your-api-key'
 OPTIONAL_AUTH_URL = None
@@ -42,7 +42,7 @@ LIBRARIES = [
     'setuptools', 'warnings', 'requests',  # libcheck required libraries
 ]
   ```
-and add the libraries that have to be checked in the `LIBRARIES`.
+and add the Pipfile path for `PIPFILE_FULL_PATH` variable, or add libraries that have to be checked in the `LIBRARIES` variable if no Pipfile for the project.
 Update the email `SAFETY_NOTICES_EMAIL` to be notified once a cybersecurity alert related to a library arise.
 It is now almost done!
 At this point, it is already possible to manually check the libraries of the Django project libraries:
