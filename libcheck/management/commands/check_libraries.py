@@ -89,6 +89,11 @@ class CheckerCommand:
                 resp = f''
                 for lib in libraries:
                     resp += f'{lib},'
+                # Add default libraries
+                for lib in libcheck_config.DEFAULT_LIBRARIES:
+                    if lib in libraries:
+                        continue
+                    resp += f'{lib},'
             except Exception as exc:
                 warnings.warn(f"File /django_libcheck/libcheck/libcheck_config.py' has been damaged. Error: {exc}")
                 resp = f''
