@@ -31,13 +31,13 @@ INSTALLED_APPS = [
 Add the end of the `settings.py` file, add the following:
   ```
 TEST = False  # If True, a notification is sent to SAFETY_NOTICES_EMAIL even if no safety alert
-PIPENV_FULL_PATH = '/pipenv/full/path'
+PIPFILE_FULL_PATH = '/pipfile/full/path'
 SAFETY_NOTICES_EMAIL = 'your_email@domain.extension'
 API_KEY = 'your-api-key'
 OPTIONAL_AUTH_URL = None
 OPTIONAL_AUTH_HEADERS = None
 LIBRARIES = [
-    # If PIPENV_FULL_PATH is None, update this libraries list, no need to update otherwise
+    # If PIPFILE_FULL_PATH is None, update this libraries list, no need to update otherwise
     'django', 'os', 'sys',  # default Django libraries
     'setuptools', 'warnings', 'requests',  # libcheck required libraries
 ]
