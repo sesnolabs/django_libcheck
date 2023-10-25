@@ -31,11 +31,16 @@ INSTALLED_APPS = [
 Add the end of the `settings.py` file, add the following:
   ```
 TEST = False  # If True, a notification is sent to SAFETY_NOTICES_EMAIL even if no safety alert
-LIBRARIES = 'warnings, requests, add-your-project-libraries-here'
+PIPFILE_FULL_PATH = '/pipfile/full/path'
 SAFETY_NOTICES_EMAIL = 'your_email@domain.extension'
 API_KEY = 'your-api-key'
 OPTIONAL_AUTH_URL = None
 OPTIONAL_AUTH_HEADERS = None
+LIBRARIES = [
+    # If PIPFILE_FULL_PATH is None, update this libraries list, no need to update otherwise
+    'django', 'os', 'sys',  # default Django libraries
+    'setuptools', 'warnings', 'requests',  # libcheck required libraries
+]
   ```
 and add the libraries that have to be checked in the `LIBRARIES`.
 Update the email `SAFETY_NOTICES_EMAIL` to be notified once a cybersecurity alert related to a library arise.
