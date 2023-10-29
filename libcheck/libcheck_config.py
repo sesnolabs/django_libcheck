@@ -3,3 +3,5 @@ DEFAULT_LIBRARIES = [
     'django', 'os', 'sys',  # default Django libraries
     'setuptools', 'warnings', 'requests',  # libcheck necessary libraries
 ]
+CONNECT_TIMEOUT = 10
+READ_TIMEOUT = 30
