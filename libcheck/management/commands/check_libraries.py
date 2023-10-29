@@ -40,7 +40,10 @@ class CheckerCommand:
             else:
                 headers.update(self.optional_auth_headers)
             # POST API request
-            response = requests.post(self.url, headers=headers, data=_data)
+            response = requests.post(
+                self.url, headers=headers, data=_data,
+                timeout=(libcheck_config.CONNECT_TIMEOUT, libcheck_config.READ_TIMEOUT)
+            )
             if response.status_code != 200:
                 warnings.warn(f"LibrariesCheck Error: POST request failed. response.text: {response.text}")
         except Exception as exc:
@@ -108,8 +111,8 @@ class Command(BaseCommand):
         try:
             cmd.test = settings.TEST
             cmd.pipfile_full_path = settings.PIPFILE_FULL_PATH
-            cmd.LIBRARIES = settings.LIBRARIES
-            cmd.SAFETY_NOTICES_EMAIL = settings.SAFETY_NOTICES_EMAIL
+            cmd.libraries = settings.LIBRARIES
+            cmd.safety_notice_email = settings.SAFETY_NOTICES_EMAIL
             if settings.OPTIONAL_AUTH_URL is not None:
                 cmd.url = str(settings.OPTIONAL_AUTH_URL)
             if settings.OPTIONAL_AUTH_HEADERS is None:
