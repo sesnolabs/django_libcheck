@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """libcheck commands"""
+import os
 import warnings
 import requests
 from django.core.management.base import BaseCommand
@@ -9,6 +10,7 @@ from libcheck import libcheck_config
 class CheckerCommand:
 
     test = None
+    noreload = None
     pipfile_full_path = None
     url = None
     libraries = None
@@ -19,6 +21,7 @@ class CheckerCommand:
 
     def __init__(self):
         self.test = False
+        self.noreload = False
         self.pipfile_full_path = None
         self.url = libcheck_config.DEFAULT_URL
         self.libraries = libcheck_config.DEFAULT_LIBRARIES
@@ -28,7 +31,18 @@ class CheckerCommand:
         self.optional_auth_headers = None
 
     def check(self, _data):
+        reloaded = False
         try:
+            if self.noreload:
+                try:
+                    if not os.environ.get("LIBRARIES_CHECKED"):
+                        os.environ["LIBRARIES_CHECKED"] = "True"
+                    else:
+                        reloaded = True
+                except Exception as exc:
+                    warnings.warn(f"Environment variable state issue. Option '--noreload' disable. Error: {exc}")
+            if reloaded:
+                return False
             # Build headers
             headers = {
                 'Content-Type': 'application/json',
@@ -48,7 +62,8 @@ class CheckerCommand:
                 warnings.warn(f"LibrariesCheck Error: POST request failed. response.text: {response.text}")
         except Exception as exc:
             warnings.warn(f"LibrariesCheck Error: {exc}")
-        return
+            return False
+        return True
 
     def get_libraries_from_pipfile(self):
         if self.pipfile_full_path is None:
@@ -104,12 +119,13 @@ class CheckerCommand:
 
 
 class Command(BaseCommand):
-    help = 'Method to ensure project libraries are safe with command ./manage.py check_libraries'
+    help = "Method to ensure project libraries are safe with command './manage.py' check_libraries"
 
     def handle(self, *args, **options):
-        cmd = CheckerCommand()
         try:
+            cmd = CheckerCommand()
             cmd.test = settings.TEST
+            cmd.noreload = settings.NORELOAD
             cmd.pipfile_full_path = settings.PIPFILE_FULL_PATH
             cmd.libraries = settings.LIBRARIES
             cmd.safety_notice_email = settings.SAFETY_NOTICES_EMAIL
@@ -120,7 +136,10 @@ class Command(BaseCommand):
             else:
                 cmd.optional_auth_headers = settings.OPTIONAL_AUTH_HEADERS
             libraries = cmd.get_libraries()
-            cmd.check(libraries)
-            self.stdout.write(f"LibrariesCheck log: project libraries '{libraries}' have been checked.")
+            checked = cmd.check(libraries)
+            if checked:
+                self.stdout.write(f"\nLibrariesCheck log:\nProject libraries '{libraries}' have been checked.\n\n")
         except Exception as exc:
-            warnings.warn(f"LibrariesCheck Error: {exc}")
+            warnings.warn(
+                f"LibrariesCheck failed. May have encountered misconfiguration in settings.py file. Error: {exc}"
+            )
