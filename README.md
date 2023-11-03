@@ -41,6 +41,7 @@ LIBRARIES = [
     'django', 'os', 'sys',  # default Django libraries
     'setuptools', 'warnings', 'requests',  # libcheck required libraries
 ]
+NORELOAD = True  # run application once without the '--noreload' option
   ```
 and add the Pipfile path for `PIPFILE_FULL_PATH` variable, or add libraries that have to be checked in the `LIBRARIES` variable if no Pipfile for the project.
 Update the email `SAFETY_NOTICES_EMAIL` to be notified once a cybersecurity alert related to a library arise.
