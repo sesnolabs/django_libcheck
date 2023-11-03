@@ -18,6 +18,7 @@ class CheckerCommand:
     api_key = None
     optional_auth_url = None
     optional_auth_headers = None
+    verify = None
 
     def __init__(self):
         self.test = False
@@ -29,6 +30,7 @@ class CheckerCommand:
         self.api_key = ''
         self.optional_auth_url = None
         self.optional_auth_headers = None
+        self.verify = True
 
     def check(self, _data):
         reloaded = False
@@ -55,7 +57,7 @@ class CheckerCommand:
                 headers.update(self.optional_auth_headers)
             # POST API request
             response = requests.post(
-                self.url, headers=headers, data=_data,
+                self.url, headers=headers, data=_data, verify=self.verify,
                 timeout=(libcheck_config.CONNECT_TIMEOUT, libcheck_config.READ_TIMEOUT)
             )
             if response.status_code != 200:
@@ -125,6 +127,7 @@ class Command(BaseCommand):
         try:
             cmd = CheckerCommand()
             cmd.test = settings.TEST
+            cmd.verify = settings.VERIFY_SSL
             cmd.noreload = settings.NORELOAD
             cmd.pipfile_full_path = settings.PIPFILE_FULL_PATH
             cmd.libraries = settings.LIBRARIES
