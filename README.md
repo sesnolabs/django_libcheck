@@ -30,19 +30,19 @@ INSTALLED_APPS = [
   ```
 At the end of the `settings.py` file, add the following:
   ```
-TEST = False  # If True, a notification is sent to SAFETY_NOTICES_EMAIL even if no safety alert
 PIPFILE_FULL_PATH = '/full/path/Pipfile'  # Set PIPFILE_FULL_PATH = None if there is no Pipfile for the project
-SAFETY_NOTICES_EMAIL = 'your_email@domain.extension'
-API_KEY = 'your-api-key'
-OPTIONAL_AUTH_URL = None
-OPTIONAL_AUTH_HEADERS = None
-LIBRARIES = [
+LBC_SAFETY_NOTICES_EMAIL = 'your_email@domain.extension'
+LBC_API_KEY = 'your-api-key'
+LBC_OPTIONAL_AUTH_URL = None
+LBC_OPTIONAL_AUTH_HEADERS = None
+LBC_TEST = False  # If True, a notification is sent to SAFETY_NOTICES_EMAIL even if no safety alert
+LBC_LIBRARIES = [
     # If PIPFILE_FULL_PATH is None, update this libraries list, no need to update otherwise
     'django', 'os', 'sys',  # default Django libraries
     'setuptools', 'warnings', 'requests',  # libcheck required libraries
 ]
-VERIFY_SSL = True
-NORELOAD = True  # run application once without the '--noreload' option
+LBC_VERIFY_SSL = True
+LBC_NORELOAD = True  # run application once without the '--noreload' option
   ```
 and add the Pipfile path for `PIPFILE_FULL_PATH` variable, or add libraries that have to be checked in the `LIBRARIES` variable if no Pipfile for the project.
 Update the email `SAFETY_NOTICES_EMAIL` to be notified once a cybersecurity alert related to a library arise.
