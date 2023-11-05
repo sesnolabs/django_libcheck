@@ -126,18 +126,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             cmd = CheckerCommand()
-            cmd.test = settings.TEST
-            cmd.verify = settings.VERIFY_SSL
-            cmd.noreload = settings.NORELOAD
+            cmd.test = settings.LBC_TEST
+            cmd.verify = settings.LBC_VERIFY_SSL
+            cmd.noreload = settings.LBC_NORELOAD
             cmd.pipfile_full_path = settings.PIPFILE_FULL_PATH
-            cmd.libraries = settings.LIBRARIES
-            cmd.safety_notice_email = settings.SAFETY_NOTICES_EMAIL
-            if settings.OPTIONAL_AUTH_URL is not None:
-                cmd.url = str(settings.OPTIONAL_AUTH_URL)
-            if settings.OPTIONAL_AUTH_HEADERS is None:
-                cmd.api_key = str(settings.API_KEY)
+            cmd.libraries = settings.LBC_LIBRARIES
+            cmd.safety_notice_email = settings.LBC_SAFETY_NOTICES_EMAIL
+            if settings.LBC_OPTIONAL_AUTH_URL is not None:
+                cmd.url = str(settings.LBC_OPTIONAL_AUTH_URL)
+            if settings.LBC_OPTIONAL_AUTH_HEADERS is None:
+                cmd.api_key = str(settings.LBC_API_KEY)
             else:
-                cmd.optional_auth_headers = settings.OPTIONAL_AUTH_HEADERS
+                cmd.optional_auth_headers = settings.LBC_OPTIONAL_AUTH_HEADERS
             libraries = cmd.get_libraries()
             checked = cmd.check(libraries)
             if checked:
