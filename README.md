@@ -35,7 +35,7 @@ LBC_SAFETY_NOTICES_EMAIL = 'your_email@domain.extension'
 LBC_API_KEY = 'your-api-key'
 LBC_OPTIONAL_AUTH_URL = None
 LBC_OPTIONAL_AUTH_HEADERS = None
-LBC_TEST = False  # If True, a notification is sent to SAFETY_NOTICES_EMAIL even if no safety alert
+LBC_TEST = False  # If True, a notification is sent to LBC_SAFETY_NOTICES_EMAIL even if no safety alert
 LBC_LIBRARIES = [
     # If PIPFILE_FULL_PATH is None, update this libraries list, no need to update otherwise
     'django', 'os', 'sys',  # default Django libraries
