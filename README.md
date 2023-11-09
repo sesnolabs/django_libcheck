@@ -38,12 +38,13 @@ LBC_OPTIONAL_AUTH_URL = None
 LBC_OPTIONAL_AUTH_HEADERS = None
 LBC_TEST = False  # If True, a notification is sent to LBC_SAFETY_NOTICES_EMAIL even if no safety alert
 LBC_LIBRARIES = [
-    # If PIPFILE_FULL_PATH is None, update this libraries list, no need to update otherwise
-    'django', 'os', 'sys',  # default Django libraries
-    'setuptools', 'warnings', 'requests', 'json',  # libcheck required libraries
+  # If PIPFILE_FULL_PATH is None, update this libraries list, no need to update otherwise
+  'django', 'os', 'sys',  # default Django libraries
+  'setuptools', 'warnings', 'requests', 'json',  # libcheck required libraries
 ]
 LBC_VERIFY_SSL = True
 LBC_NORELOAD = True  # run application once without the '--noreload' option
+LBC_PROJECT_NAME = 'AllProjects'  # Optional custom name for each project
   ```
 and add the Pipfile path for `PIPFILE_FULL_PATH` variable, or add libraries that have to be checked in the `LIBRARIES` variable if no Pipfile for the project.
 Update the email `SAFETY_NOTICES_EMAIL` to be notified once a cybersecurity alert related to a library arise.
