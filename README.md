@@ -30,6 +30,7 @@ INSTALLED_APPS = [
   ```
 At the end of the `settings.py` file, add the following:
   ```
+# Libcheck settings
 PIPFILE_FULL_PATH = '/full/path/Pipfile'  # Set PIPFILE_FULL_PATH = None if there is no Pipfile for the project
 LBC_SAFETY_NOTICES_EMAIL = 'your_email@domain.extension'
 LBC_API_KEY = 'your-api-key'
