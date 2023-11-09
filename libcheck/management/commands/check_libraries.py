@@ -3,6 +3,7 @@
 import os
 import warnings
 import requests
+import json
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from libcheck import libcheck_config
@@ -34,6 +35,7 @@ class CheckerCommand:
 
     def check(self, _data):
         reloaded = False
+        msg = None
         try:
             if self.noreload:
                 try:
@@ -44,7 +46,7 @@ class CheckerCommand:
                 except Exception as exc:
                     warnings.warn(f"Environment variable state issue. Option '--noreload' disable. Error: {exc}")
             if reloaded:
-                return False
+                return False, msg
             # Build headers
             headers = {
                 'Content-Type': 'application/json',
@@ -62,10 +64,17 @@ class CheckerCommand:
             )
             if response.status_code != 200:
                 warnings.warn(f"LibrariesCheck Error: POST request failed. response.text: {response.text}")
+            else:
+                try:
+                    response_text = json.loads(response.text)
+                    msg = response_text['result']['message']
+                except Exception as exc:
+                    msg = f"LibrariesCheck log: Project libraries have been checked. "
+                    msg += f"Warning! Failed to read response.text: {exc}."
         except Exception as exc:
             warnings.warn(f"LibrariesCheck Error: {exc}")
-            return False
-        return True
+            return False, msg
+        return True, msg
 
     def get_libraries_from_pipfile(self):
         if self.pipfile_full_path is None:
@@ -139,9 +148,9 @@ class Command(BaseCommand):
             else:
                 cmd.optional_auth_headers = settings.LBC_OPTIONAL_AUTH_HEADERS
             libraries = cmd.get_libraries()
-            checked = cmd.check(libraries)
+            checked, msg = cmd.check(libraries)
             if checked:
-                self.stdout.write(f"\nLibrariesCheck log:\nProject libraries '{libraries}' have been checked.\n\n")
+                self.stdout.write(f"\n{msg}\n\n")
         except Exception as exc:
             warnings.warn(
                 f"LibrariesCheck failed. May have encountered misconfiguration in settings.py file. Error: {exc}"
