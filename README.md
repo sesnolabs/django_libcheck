@@ -39,7 +39,7 @@ LBC_TEST = False  # If True, a notification is sent to LBC_SAFETY_NOTICES_EMAIL 
 LBC_LIBRARIES = [
     # If PIPFILE_FULL_PATH is None, update this libraries list, no need to update otherwise
     'django', 'os', 'sys',  # default Django libraries
-    'setuptools', 'warnings', 'requests',  # libcheck required libraries
+    'setuptools', 'warnings', 'requests', 'json',  # libcheck required libraries
 ]
 LBC_VERIFY_SSL = True
 LBC_NORELOAD = True  # run application once without the '--noreload' option
