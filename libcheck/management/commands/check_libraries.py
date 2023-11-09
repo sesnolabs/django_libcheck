@@ -20,6 +20,7 @@ class CheckerCommand:
     optional_auth_url = None
     optional_auth_headers = None
     verify = None
+    project_name = None
 
     def __init__(self):
         self.test = False
@@ -32,6 +33,7 @@ class CheckerCommand:
         self.optional_auth_url = None
         self.optional_auth_headers = None
         self.verify = True
+        self.project_name = 'AllProjects'
 
     def check(self, _data):
         reloaded = False
@@ -51,6 +53,7 @@ class CheckerCommand:
             headers = {
                 'Content-Type': 'application/json',
                 'email': str(self.safety_notice_email),
+                'project': str(self.project_name),
                 'test': str(self.test),
             }
             if self.optional_auth_headers is None:
@@ -135,9 +138,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             cmd = CheckerCommand()
-            cmd.test = settings.LBC_TEST
-            cmd.verify = settings.LBC_VERIFY_SSL
-            cmd.noreload = settings.LBC_NORELOAD
+            try:
+                cmd.test = settings.LBC_TEST
+                cmd.verify = settings.LBC_VERIFY_SSL
+                cmd.noreload = settings.LBC_NORELOAD
+            except AttributeError:
+                pass
             cmd.pipfile_full_path = settings.PIPFILE_FULL_PATH
             cmd.libraries = settings.LBC_LIBRARIES
             cmd.safety_notice_email = settings.LBC_SAFETY_NOTICES_EMAIL
@@ -147,6 +153,10 @@ class Command(BaseCommand):
                 cmd.api_key = str(settings.LBC_API_KEY)
             else:
                 cmd.optional_auth_headers = settings.LBC_OPTIONAL_AUTH_HEADERS
+            try:
+                cmd.project_name = settings.LBC_PROJECT_NAME
+            except AttributeError:
+                pass
             libraries = cmd.get_libraries()
             checked, msg = cmd.check(libraries)
             if checked:
