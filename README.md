@@ -83,5 +83,8 @@ by
 ExecStartPre=/path/to/django/project/manage.py check_libraries
 ExecStart=/usr/bin/uwsgi --ini /path/to/your/uwsgi_config.ini
   ```
-Don't forget to restart the uWSGI service, eg `sudo systemctl restart your_django_app.service`
+Don't forget to restart the uWSGI service, eg:
+  ```
+sudo systemctl restart your_django_app.service
+  ```
 It's done!
