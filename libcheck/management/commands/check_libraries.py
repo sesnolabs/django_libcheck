@@ -137,7 +137,10 @@ class Command(BaseCommand):
     help = "Method to ensure project libraries are safe with command './manage.py' check_libraries"
 
     def handle(self, *args, **options):
-        dev = options['dev']
+        try:
+            dev = options['dev']
+        except KeyError:
+            dev = False
         try:
             cmd = CheckerCommand()
             try:
