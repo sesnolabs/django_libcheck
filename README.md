@@ -66,8 +66,22 @@ from libcheck.management.commands import check_libraries
   ```
 and at the end of the `main()` method, replace `execute_from_command_line(sys.argv)` with:
   ```
-    check_libraries.Command().handle()
+    check_libraries.Command().handle(**{'dev': True})
     execute_from_command_line(sys.argv)
   ```
-It is done!
+It's done!
 The command `./manage.py runserver` will now also activate an auto-check of all libraries.
+## Keep checking libraries while in production mode
+In the uWSGI systemd service file (eg `your_django_app.service`), replace
+  ```
+# Start uWSGI with your WSGI application
+ExecStart=/usr/bin/uwsgi --ini /path/to/your/uwsgi_config.ini
+  ```
+by
+  ```
+# Start uWSGI with your WSGI application after libraries check
+ExecStartPre=/path/to/django/project/manage.py check_libraries
+ExecStart=/usr/bin/uwsgi --ini /path/to/your/uwsgi_config.ini
+  ```
+Don't forget to restart the uWSGI service, eg `sudo systemctl restart your_django_app.service`
+It's done!
