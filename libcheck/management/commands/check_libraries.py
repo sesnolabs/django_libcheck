@@ -35,7 +35,7 @@ class CheckerCommand:
         self.verify = True
         self.project_name = 'AllProjects'
 
-    def check(self, _data):
+    def check(self, _data, dev=True):
         reloaded = False
         msg = None
         try:
@@ -54,6 +54,7 @@ class CheckerCommand:
                 'Content-Type': 'application/json',
                 'email': str(self.safety_notice_email),
                 'project': str(self.project_name),
+                'dev_mode': str(dev),
                 'test': str(self.test),
             }
             if self.optional_auth_headers is None:
@@ -79,7 +80,7 @@ class CheckerCommand:
             return False, msg
         return True, msg
 
-    def get_libraries_from_pipfile(self):
+    def _get_libraries_from_pipfile(self):
         if self.pipfile_full_path is None:
             return
         libraries = []
@@ -109,7 +110,7 @@ class CheckerCommand:
         return libraries
 
     def get_libraries(self):
-        libraries = self.get_libraries_from_pipfile()
+        libraries = self._get_libraries_from_pipfile()
         if libraries is None:
             libraries = self.libraries
         if isinstance(libraries, str):
@@ -136,6 +137,7 @@ class Command(BaseCommand):
     help = "Method to ensure project libraries are safe with command './manage.py' check_libraries"
 
     def handle(self, *args, **options):
+        dev = options['dev']
         try:
             cmd = CheckerCommand()
             try:
@@ -158,7 +160,7 @@ class Command(BaseCommand):
             except AttributeError:
                 pass
             libraries = cmd.get_libraries()
-            checked, msg = cmd.check(libraries)
+            checked, msg = cmd.check(libraries, dev=dev)
             if checked:
                 self.stdout.write(f"\n{msg}\n\n")
         except Exception as exc:
